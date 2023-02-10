@@ -15,11 +15,12 @@ public class StudentDaoImpl implements IStudentDao {
 
 	@Override
 	public String save(Student student) {
-		String sqlInsertQuery = "insert into student(`sname`, `sage`, `saddr`) values(?, ?, ?)";
+
+		String sqlInsertQuery = "insert into student(`sname`,`sage`,`saddr`) values(?,?,?)";
 		PreparedStatement pstmt = null;
 		String status = null;
 		try {
-			Connection connection = JdbcUtil.getJdbcConnection();
+			connection = JdbcUtil.getJdbcConnection();
 			if (connection != null)
 				pstmt = connection.prepareStatement(sqlInsertQuery);
 			if (pstmt != null) {
@@ -36,23 +37,19 @@ public class StudentDaoImpl implements IStudentDao {
 				}
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			status = "failure";
 		}
 		return status;
 	}
 
-	/**
-	 *
-	 */
 	@Override
 	public Student findById(Integer sid) {
-		String sqlSelectQuery = "select sid, sname, sage, saddr from student where sid=?";
+
+		String sqlSelectQuery = "select sid,sname,sage,saddr from student where sid=?";
 		PreparedStatement pstmt = null;
 		Student student = null;
-
 		try {
 			connection = JdbcUtil.getJdbcConnection();
 			if (connection != null)
@@ -62,20 +59,18 @@ public class StudentDaoImpl implements IStudentDao {
 			}
 			if (pstmt != null) {
 				ResultSet resultSet = pstmt.executeQuery();
+
 				if (resultSet.next()) {
-					// copy the resultset data to StudentDTO and transfer to the view
+					// copy the reusltSet data to StudentDTO and trasfer to the view
 					student = new Student();
 					student.setSid(resultSet.getInt(1));
 					student.setSname(resultSet.getString(2));
 					student.setSage(resultSet.getInt(3));
-					;
 					student.setSaddr(resultSet.getString(4));
 				}
 			}
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		return student;
@@ -83,11 +78,11 @@ public class StudentDaoImpl implements IStudentDao {
 
 	@Override
 	public String updateById(Student student) {
-		String sqlUpdateQuery = "update student set sname=?, sage=?, saddr=? where sid=?";
+		String sqlUpdateQuery = "update student set sname=?,sage=?,saddr=? where sid = ?";
 		PreparedStatement pstmt = null;
 		String status = null;
 		try {
-			Connection connection = JdbcUtil.getJdbcConnection();
+			connection = JdbcUtil.getJdbcConnection();
 			if (connection != null)
 				pstmt = connection.prepareStatement(sqlUpdateQuery);
 			if (pstmt != null) {
@@ -104,46 +99,43 @@ public class StudentDaoImpl implements IStudentDao {
 					status = "failure";
 				}
 			}
-
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			status = "failure";
 		}
 		return status;
 	}
 
 	@Override
 	public String deleteById(Integer sid) {
-		String sqlDeleteQuery = "delete from student where sid=?";
+
+		String sqlDeleteQuery = "delete from student where sid = ? ";
 		PreparedStatement pstmt = null;
 		String status = null;
 		try {
 			Student student = findById(sid);
 			if (student != null) {
+
 				connection = JdbcUtil.getJdbcConnection();
 				if (connection != null)
 					pstmt = connection.prepareStatement(sqlDeleteQuery);
-				if (pstmt != null) {
+				if (pstmt != null)
 					pstmt.setInt(1, sid);
-				}
+
 				if (pstmt != null) {
 					int rowAffected = pstmt.executeUpdate();
 					if (rowAffected == 1)
 						status = "success";
 				}
-
 			} else {
-				status = "not available";
+				status = "notavailable";
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			status = "failure";
 		}
 		return status;
-
 	}
 
 }
