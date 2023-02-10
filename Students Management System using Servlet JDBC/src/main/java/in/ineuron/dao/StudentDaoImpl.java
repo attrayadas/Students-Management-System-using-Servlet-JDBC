@@ -44,9 +44,12 @@ public class StudentDaoImpl implements IStudentDao {
 		return status;
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public Student findById(Integer sid) {
-		String sqlSelectQuery = "select sid, name, email, city, country from student where sid=?";
+		String sqlSelectQuery = "select sid, sname, sage, saddr from student where sid=?";
 		PreparedStatement pstmt = null;
 		Student student = null;
 
@@ -62,12 +65,11 @@ public class StudentDaoImpl implements IStudentDao {
 				if (resultSet.next()) {
 					// copy the resultset data to StudentDTO and transfer to the view
 					student = new Student();
-
-					student.setId(resultSet.getInt(1));
-					student.setName(resultSet.getString(2));
-					student.setEmail(resultSet.getString(3));
-					student.setCity(resultSet.getString(4));
-					student.setCountry(resultSet.getString(5));
+					student.setSid(resultSet.getInt(1));
+					student.setSname(resultSet.getString(2));
+					student.setSage(resultSet.getInt(3));
+					;
+					student.setSaddr(resultSet.getString(4));
 				}
 			}
 
@@ -81,7 +83,7 @@ public class StudentDaoImpl implements IStudentDao {
 
 	@Override
 	public String updateById(Student student) {
-		String sqlUpdateQuery = "update student set name=?, email=?, city=?, country=? where sid=?";
+		String sqlUpdateQuery = "update student set sname=?, sage=?, saddr=? where sid=?";
 		PreparedStatement pstmt = null;
 		String status = null;
 		try {
@@ -89,11 +91,10 @@ public class StudentDaoImpl implements IStudentDao {
 			if (connection != null)
 				pstmt = connection.prepareStatement(sqlUpdateQuery);
 			if (pstmt != null) {
-				pstmt.setString(1, student.getName());
-				pstmt.setString(2, student.getEmail());
-				pstmt.setString(3, student.getCity());
-				pstmt.setString(4, student.getCountry());
-				pstmt.setInt(5, student.getId());
+				pstmt.setString(1, student.getSname());
+				pstmt.setInt(2, student.getSage());
+				pstmt.setString(3, student.getSaddr());
+				pstmt.setInt(4, student.getSid());
 			}
 			if (pstmt != null) {
 				int rowAffected = pstmt.executeUpdate();
