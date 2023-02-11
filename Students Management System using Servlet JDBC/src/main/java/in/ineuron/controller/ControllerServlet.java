@@ -68,7 +68,7 @@ public class ControllerServlet extends HttpServlet {
 				response.setContentType("text/html");
 				PrintWriter out = response.getWriter();
 				out.println("<html><head><title>STUDENT DATA</title></head>");
-				out.println("<body bgcolor='lightblue'>");
+				out.println("<body bgcolor='#E7E0C9'>");
 				out.println("</br></br></br>");
 				out.println("<table align='center'; border='1'>");
 				out.println("<tr>");
@@ -116,7 +116,7 @@ public class ControllerServlet extends HttpServlet {
 				// display edit page using html
 				PrintWriter out = response.getWriter();
 				out.println("<html><head><title>OUTPUT</title></head>");
-				out.println("<body bgcolor='lightblue'>");
+				out.println("<body bgcolor='#E7E0C9'>");
 				out.println("<br/><br/><br/>");
 				out.println("<form method='post' action='./update'>");
 				out.println("<table align='center'>");
